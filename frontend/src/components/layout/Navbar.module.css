@@ -1,0 +1,56 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 1.5em;
+    background-color: #0f2862;
+    color: #fff;
+}
+
+.navbar_logo {
+    display: flex;
+    align-items: center;
+}
+
+.navbar_logo img {
+    width: 40px;
+    margin-right: .8em;
+}
+
+.navbar ul {
+    display: flex;
+    align-items: center;
+    list-style: none;    
+}
+
+.navbar li, 
+.navbar a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .5s;
+    padding: .5em;
+    border-radius: 5px;    
+    margin: 0 5px;
+}
+
+.btn_login {
+    background-color: #fc5226;
+}
+
+.btn_login:hover {
+    background-color: #d62b00;
+}
+
+.btn_register {
+    background-color:  #3a4660;
+}
+
+.btn_register:hover {
+    background-color: #4f5f76;    
+}
+
+.btn_home:hover > a {
+    color: #fc5226;
+}
+
