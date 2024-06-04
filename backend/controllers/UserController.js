@@ -1,7 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
 
 //helpers
 const createUserToken = require("../helpers/create-user-token");
@@ -56,13 +55,14 @@ module.exports = class UserController {
 
     // create user
     const user = new User({
-      name: name,
-      email: email,
+      name,
+      email,
       password: passwordHash,
     });
 
     try {
       const newUser = await user.save();
+
       await createUserToken(newUser, req, res);
     } catch (error) {
       res.status(500).json({ message: error });
@@ -70,8 +70,7 @@ module.exports = class UserController {
   }
 
   static async login(req, res) {
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
 
     if (!email) {
       res.status(422).json({ message: "O e-mail é obrigatório!" });
@@ -95,6 +94,7 @@ module.exports = class UserController {
 
     // check if password match
     const checkPassword = await bcrypt.compare(password, user.password);
+
     if (!checkPassword) {
       res.status(422).json({
         message: "Senha inválida",
@@ -137,11 +137,15 @@ module.exports = class UserController {
   }
 
   static async editUser(req, res) {
+    const id = req.params.id;
+
     // check if user exists
     const token = getToken(req);
     const user = await getUserByToken(token);
 
-    const { name, email, password, confirmpassword } = req.body;
+    console.log(req.body);
+
+    const { name, email } = req.body;
 
     // validations
     if (!name) {
@@ -166,28 +170,12 @@ module.exports = class UserController {
 
     user.email = email;
 
-    // check if password match
-    if (password != confirmpassword) {
-      res.status(422).json({ message: "As senhas não conferem!" });
-      return;
-    } else if (password === confirmpassword && password != null) {
-      //creating password
-      const salt = await bcrypt.genSalt(12);
-      const passwordHash = await bcrypt.hash(password, salt);
-
-      user.password = passwordHash;
-    }
-
     try {
       // returns updated data
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: user._id },
-        { $set: user },
-        { new: true }
-      );
+      await User.updateOne({ _id: user._id }, { $set: user }, { new: true });
       res.status(200).json({
         message: "Usuário atualizado com sucesso!",
-        data: updatedUser,
+        // data: updatedUser,
       });
     } catch (error) {
       res.status(500).json({ message: error });

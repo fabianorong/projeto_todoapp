@@ -35,14 +35,11 @@ function Profile() {
 
     let msgType = "success";
 
-    const formData = new FormData();
-
-    await Object.keys(user).forEach((key) => formData.append(key, user[key]));
-
     const data = await api
-      .patch(`/users/edit/${user._id}`, formData, {
+      .patch(`/users/edit/${user._id}`, user, {
         headers: {
           Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-Type": "application/json",
         },
       })
       .then((response) => {
@@ -78,19 +75,6 @@ function Profile() {
           value={user.email || ""}
         />
 
-        <Input
-          text="Password"
-          type="password"
-          name="password"
-          handleOnChange={handleChange}
-          value={user.password || ""}
-        />
-        <Input
-          text="Confirm password"
-          type="password"
-          name="confirmpassword"
-          handleOnChange={handleChange}
-        />
         <input type="submit" value="Update" />
       </form>
     </section>

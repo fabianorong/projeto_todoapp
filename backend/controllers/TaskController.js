@@ -12,7 +12,7 @@ module.exports = class TaskController {
     const done = false;
 
     //validations
-    if (!name) {
+    if (name == undefined) {
       res.status(422).json({ message: "O nome da tarefa é obrigatório" });
       return;
     }
