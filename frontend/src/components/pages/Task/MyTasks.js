@@ -76,6 +76,8 @@ function MyTask() {
             tasks.map((task) => (
               <div className={styles.tasklist_row} key={task._id}>
                 <span className="bold">{task.name}</span>
+                <span className="bold">{task.effort}</span>
+                <span className="bold">{task.period}</span>
                 <div className={styles.actions}>
                   {task.done === false ? (
                     <>
