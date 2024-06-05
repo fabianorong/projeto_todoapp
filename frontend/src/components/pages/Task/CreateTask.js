@@ -1,5 +1,5 @@
 import api from "../../../utils/api";
-// import styles from "./CreateTask.module.css";
+import styles from "./CreateTask.module.css";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,17 +15,10 @@ function CreateTask() {
   async function registerTask(task) {
     let msgType = "success";
 
-    let formData = new FormData();
-
-    await Object.keys(task).forEach((key) => {
-      formData.append(key, task[key]);
-    });
-
-    console.log(formData);
-
     const data = await api
-      .post("/tasks/create/", formData, {
+      .post("/tasks/create/", task, {
         Authorization: `Bearer ${JSON.parse(token)}`,
+        "Content-Type": "application/json",
       })
       .then((response) => {
         return response.data;
@@ -37,10 +30,10 @@ function CreateTask() {
 
     setFlashMessage(data.message, msgType);
     if (msgType !== "error") {
-      navigate("/tasks/mytasks");
+      navigate("/task/mytasks");
     }
 
-    console.log(formData);
+    console.log(task);
   }
 
   return (
