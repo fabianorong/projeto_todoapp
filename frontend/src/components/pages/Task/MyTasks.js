@@ -44,6 +44,28 @@ function MyTask() {
     setFlashMessage(data.message, msgType);
   }
 
+  async function concludeTask(id) {
+    let msgType = "success";
+
+    const data = await api
+      .patch(`/tasks/mytasks/conclude/${id}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        const updatedTasks = tasks.filter((task) => task._id !== id);
+        setTasks(updatedTasks);
+        return response.data;
+      })
+      .catch((err) => {
+        msgType = "error";
+        return err.response.data;
+      });
+
+    setFlashMessage(data.message, msgType);
+  }
+
   return (
     <section>
       <div className={styles.tasklist_header}>
@@ -57,7 +79,12 @@ function MyTask() {
                 <div className={styles.actions}>
                   {task.done === false ? (
                     <>
-                      <button className={styles.conclude_btn}>
+                      <button
+                        className={styles.conclude_btn}
+                        onClick={() => {
+                          concludeTask(task._id);
+                        }}
+                      >
                         Concluir Task
                       </button>
                       <Link to={`/task/edit/${task._id}`}>Edit</Link>
@@ -70,7 +97,16 @@ function MyTask() {
                       </button>
                     </>
                   ) : (
-                    <p>Task concluida</p>
+                    <>
+                      <button
+                        onClick={() => {
+                          removeTask(task._id);
+                        }}
+                      >
+                        Excluir
+                      </button>
+                      <p>Task concluida</p>
+                    </>
                   )}
                 </div>
               </div>
