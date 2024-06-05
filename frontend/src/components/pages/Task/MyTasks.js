@@ -22,6 +22,28 @@ function MyTask() {
       });
   }, [token]);
 
+  async function removeTask(id) {
+    let msgType = "success";
+
+    const data = await api
+      .delete(`/tasks/mytasks/${id}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        const updatedTasks = tasks.filter((task) => task._id !== id);
+        setTasks(updatedTasks);
+        return response.data;
+      })
+      .catch((err) => {
+        msgType = "error";
+        return err.response.data;
+      });
+
+    setFlashMessage(data.message, msgType);
+  }
+
   return (
     <section>
       <div className={styles.tasklist_header}>
@@ -39,7 +61,13 @@ function MyTask() {
                         Concluir Task
                       </button>
                       <Link to={`/task/edit/${task._id}`}>Edit</Link>
-                      <button>Excluir</button>
+                      <button
+                        onClick={() => {
+                          removeTask(task._id);
+                        }}
+                      >
+                        Excluir
+                      </button>
                     </>
                   ) : (
                     <p>Task concluida</p>
