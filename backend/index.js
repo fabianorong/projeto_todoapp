@@ -1,7 +1,10 @@
+const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
 
 const app = express();
+
+dotenv.config({ path: "./config.env" });
 
 // Config JSON response
 app.use(express.json());

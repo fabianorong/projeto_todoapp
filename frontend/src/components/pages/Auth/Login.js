@@ -38,6 +38,9 @@ function Login() {
           // placeholder="digite a sua senha"
           handleOnChange={handleChange}
         />
+        <div className={styles.form_container_link}>
+          <Link to="/forgotpassword">Forgot your password?</Link>
+        </div>
         <input type="submit" value="Log In" />
       </form>
       <p>

@@ -9,6 +9,8 @@ import Message from "./components/layout/Message";
 // Pages
 import Login from "./components/pages/Auth/Login";
 import Register from "./components/pages/Auth/Register";
+import ForgotPassword from "./components/pages/Auth/ForgotPassword";
+import ResetPassword from "./components/pages/Auth/ResetPassword";
 import Home from "./components/pages/Home";
 import Profile from "./components/pages/User/Profile";
 import MyTasks from "./components/pages/Task/MyTasks";
@@ -28,6 +30,8 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/resetpassword/:token" element={<ResetPassword />} />
             <Route path="/user/profile" element={<Profile />} />
             <Route path="/task/mytasks" element={<MyTasks />} />
             <Route path="/tasks/create" element={<CreateTask />} />

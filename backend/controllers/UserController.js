@@ -1,11 +1,14 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const validator = require("validator");
+const crypto = require("crypto");
 
 //helpers
 const createUserToken = require("../helpers/create-user-token");
 const getToken = require("../helpers/get-token");
 const getUserByToken = require("../helpers/get-user-by-token");
+const sendEmail = require("../helpers/email");
 
 module.exports = class UserController {
   static async register(req, res) {
@@ -19,6 +22,11 @@ module.exports = class UserController {
 
     if (!email) {
       res.status(422).json({ message: "O e-mail é obrigatório!" });
+      return;
+    }
+
+    if (email && !validator.isEmail) {
+      res.status(422).json({ message: "Please provide a valid email" });
       return;
     }
 
@@ -169,6 +177,112 @@ module.exports = class UserController {
     }
 
     user.email = email;
+  }
+
+  static async forgotPassword(req, res) {
+    const { email } = req.body;
+
+    // validations
+    if (!email) {
+      res.status(422).json({ message: "O e-mail é obrigatório!" });
+      return;
+    }
+
+    // check if user exists
+    const userExists = await User.findOne({ email: email });
+
+    if (!userExists) {
+      res
+        .status(422)
+        .json({ message: "O e-mail inserido não está cadastrado no sistema" });
+      return;
+    }
+
+    // 2) Generate the random reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const passwordResetToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+    const passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+    userExists.passwordResetToken = passwordResetToken;
+    userExists.passwordResetExpires = passwordResetExpires;
+
+    await userExists.save({ validateBeforeSave: false });
+
+    const resetURL = `${req.protocol}://${req.get(
+      "host"
+    )}/users/resetpassword/${resetToken}`;
+
+    const message = `forgot your password? submit a patch request with your new password and passwordconfirm to: ${resetURL}. if you didnt forget your password, please ignore this email`;
+
+    try {
+      await sendEmail({
+        email: userExists.email,
+        subject: "Your password reset token (valid for 10 min)",
+        message,
+      });
+
+      res.status(200).json({
+        status: "success",
+        message: "Token enviado para o email",
+      });
+    } catch (error) {
+      userExists.passwordResetToken = undefined;
+      userExists.passwordResetExpires = undefined;
+      await userExists.save({ validateBeforeSave: false });
+      res.status(500).json({ message: error });
+    }
+  }
+
+  static async resetPassword(req, res) {
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    // var hashedToken = req.params.token;
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    console.log(req.body); // Adicione esta linha para verificar o conteúdo de req.body
+
+    const { password, confirmpassword } = req.body;
+
+    if (!user) {
+      res.status(422).json({ message: "Token is invalid or has expired" });
+      return;
+    }
+
+    if (!password) {
+      res.status(422).json({ message: "A senha é obrigatória!" });
+      return;
+    }
+
+    user.password = password;
+
+    if (!confirmpassword) {
+      res
+        .status(422)
+        .json({ message: "A confirmação de senha é obrigatória!" });
+      return;
+    }
+
+    if (password != confirmpassword) {
+      res
+        .status(422)
+        .json({ message: "A senha e a confirmação precisam ser iguais!" });
+      return;
+    }
+
+    const salt = await bcrypt.genSalt(12);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    user.password = passwordHash;
 
     try {
       // returns updated data
@@ -181,5 +295,20 @@ module.exports = class UserController {
       res.status(500).json({ message: error });
       return;
     }
+
+    // try {
+    //   user.password = passwordHash;
+    //   user.passwordChangedAt = Date.now();
+    //   user.passwordResetToken = undefined;
+    //   user.passwordResetExpires = undefined;
+
+    //   await user.save();
+
+    //   res.status(200).json({
+    //     message: "Password updated",
+    //   });
+    // } catch (error) {
+    //   res.status(500).json({ message: error });
+    // }
   }
 };

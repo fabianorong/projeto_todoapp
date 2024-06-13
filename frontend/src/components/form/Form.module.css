@@ -11,6 +11,23 @@
     margin-top: 0.5em;
 }
 
+.form_container_link a {
+    justify-content: right;
+    display: flex;
+    margin-bottom: 2em;
+    margin-top: -0.7em;
+    font-size: 0.7em;
+    text-decoration: none;
+    color: black;
+    
+    
+}
+
+.form_container_link a:hover {
+    transition: 0.4s;
+    color: #d62b00;
+}
+
 .form_container input[type='submit'] {
     border-radius: 8px;
     background-color: #25b456;
@@ -26,12 +43,14 @@
 
 .form_container input[type='submit']:hover {
     background-color: #1c8a42;
+    transition: 0.5s;
 }
 
 .form_container p {
     margin-top: 1em;
     justify-content: center;
     display: flex;
+    font-size: 0.8em;
 }
 
 .form_container p a {

@@ -7,6 +7,7 @@ import useFlashMessage from "./useFlashMessage";
 
 export default function useAuth() {
   const [authenticated, setAuthenticated] = useState(false);
+  const [resetpassword, setResetpassword] = useState(false);
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
 
@@ -14,6 +15,7 @@ export default function useAuth() {
     const token = localStorage.getItem("token");
 
     if (token) {
+      // localStorage.clear();
       api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
       setAuthenticated(true);
     }
@@ -65,6 +67,21 @@ export default function useAuth() {
     setFlashMessage(msgText, msgType);
   }
 
+  async function forgotpassword(user) {
+    let msgText = "instruction sent to email";
+    let msgType = "success";
+    try {
+      await api.post("users/forgotpassword", user).then((response) => {
+        return response.data;
+      });
+    } catch (error) {
+      msgText = error.response.data.message;
+      msgType = "error";
+    }
+
+    setFlashMessage(msgText, msgType);
+  }
+
   async function authUser(data) {
     setAuthenticated(true);
 
@@ -72,5 +89,12 @@ export default function useAuth() {
     navigate("/");
   }
 
-  return { authenticated, register, logout, login };
+  return {
+    authenticated,
+    register,
+    logout,
+    login,
+    forgotpassword,
+    resetpassword,
+  };
 }
