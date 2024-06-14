@@ -1,5 +1,4 @@
 import api from "../../../utils/api";
-import styles from "./CreateTask.module.css";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,8 +16,10 @@ function CreateTask() {
 
     const data = await api
       .post("/tasks/create/", task, {
-        Authorization: `Bearer ${JSON.parse(token)}`,
-        "Content-Type": "application/json",
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-Type": "application/json",
+        },
       })
       .then((response) => {
         return response.data;

@@ -3,7 +3,9 @@ import { useState } from "react";
 import Input from "./Input";
 import Select from "./Select";
 
-import formstyles from "./Form.module.css";
+// import formstyles from "./Form.module.css";
+
+import rowstyles from "./Row.module.css";
 
 function TaskForm({ handleSubmit, taskData, btnText }) {
   const [task, setTask] = useState(taskData || {});
@@ -28,31 +30,38 @@ function TaskForm({ handleSubmit, taskData, btnText }) {
   }
 
   return (
-    <form onSubmit={submit} className={formstyles.form_container}>
-      <Input
-        text="Task Name"
-        type="text"
-        name="name"
-        handleOnChange={handleChange}
-        value={task.name || ""}
-      />
+    // <form onSubmit={submit} className={formstyles.form_container}>
+    <div className={rowstyles.container}>
+      <div onSubmit={submit} className={rowstyles.row}>
+        <Input
+          text="Task Name"
+          type="text"
+          name="name"
+          handleOnChange={handleChange}
+          value={task.name || ""}
+        />
 
-      <Select
-        name="effort"
-        text="Effort Level"
-        options={effort}
-        handleOnChange={handleEffort}
-        value={task.effort || ""}
-      />
-      <Select
-        name="period"
-        text="Period"
-        options={period}
-        handleOnChange={handlePeriod}
-        value={task.period || ""}
-      />
-      <input type="submit" value={btnText} />
-    </form>
+        <Select
+          name="effort"
+          text="Effort Level"
+          options={effort}
+          handleOnChange={handleEffort}
+          value={task.effort || ""}
+        />
+
+        <Select
+          name="period"
+          text="Period"
+          options={period}
+          handleOnChange={handlePeriod}
+          value={task.period || ""}
+        />
+        <div className={rowstyles.btn}>
+          <input type="submit" value={btnText} />
+        </div>
+      </div>
+    </div>
+    // {/* </form> */}
   );
 }
 

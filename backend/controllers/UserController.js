@@ -284,31 +284,31 @@ module.exports = class UserController {
 
     user.password = passwordHash;
 
-    try {
-      // returns updated data
-      await User.updateOne({ _id: user._id }, { $set: user }, { new: true });
-      res.status(200).json({
-        message: "Usuário atualizado com sucesso!",
-        // data: updatedUser,
-      });
-    } catch (error) {
-      res.status(500).json({ message: error });
-      return;
-    }
-
     // try {
-    //   user.password = passwordHash;
-    //   user.passwordChangedAt = Date.now();
-    //   user.passwordResetToken = undefined;
-    //   user.passwordResetExpires = undefined;
-
-    //   await user.save();
-
+    //   // returns updated data
+    //   await User.updateOne({ _id: user._id }, { $set: user }, { new: true });
     //   res.status(200).json({
-    //     message: "Password updated",
+    //     message: "Usuário atualizado com sucesso!",
+    //     // data: updatedUser,
     //   });
     // } catch (error) {
     //   res.status(500).json({ message: error });
+    //   return;
     // }
+
+    try {
+      user.password = passwordHash;
+      user.passwordChangedAt = Date.now();
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+
+      await user.save();
+
+      res.status(200).json({
+        message: "Password updated",
+      });
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
   }
 };

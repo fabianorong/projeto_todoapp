@@ -7,7 +7,7 @@ import useFlashMessage from "./useFlashMessage";
 
 export default function useAuth() {
   const [authenticated, setAuthenticated] = useState(false);
-  const [resetpassword, setResetpassword] = useState(false);
+  const [resetpassword] = useState(false);
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
 

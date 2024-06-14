@@ -2,7 +2,7 @@
   padding: 0;
   margin: 0;
   font-family: Helvetica;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
 }
 
 h1 {
