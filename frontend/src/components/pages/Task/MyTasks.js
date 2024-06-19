@@ -1,12 +1,12 @@
-// MyTask.js
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CreateTask from "./CreateTask";
 import useFlashMessage from "../../../hooks/useFlashMessage";
 import styles from "./Dashboard.module.css";
-import { getTasks, deleteTask, concludeTask } from "../../../hooks/taskService";
+import { deleteTask, concludeTask } from "../../../hooks/taskService";
+import api from "../../../utils/api";
 
-import rowstyles from "../../form/Row.module.css";
+// import rowstyles from "../../form/Row.module.css";
 
 function MyTask() {
   const [tasks, setTasks] = useState([]);
@@ -14,16 +14,28 @@ function MyTask() {
   const { setFlashMessage } = useFlashMessage();
 
   useEffect(() => {
-    async function fetchTasks() {
-      try {
-        const tasks = await getTasks(token);
-        setTasks(tasks);
-      } catch (err) {
-        setFlashMessage(err.message, "error");
-      }
-    }
-    fetchTasks();
-  }, [token, setFlashMessage]);
+    api
+      .get("/tasks/mytasks", {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        setTasks(response.data.tasks);
+      });
+  }, [token]);
+
+  // useEffect(() => {
+  //   async function fetchTasks() {
+  //     try {
+  //       const tasks = await getTasks(token);
+  //       setTasks(tasks);
+  //     } catch (err) {
+  //       setFlashMessage(err.message, "error");
+  //     }
+  //   }
+  //   fetchTasks();
+  // }, [token, setFlashMessage]);
 
   async function handleRemoveTask(id) {
     let msgType = "success";

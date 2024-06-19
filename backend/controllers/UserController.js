@@ -116,7 +116,7 @@ module.exports = class UserController {
   static async checkUser(req, res) {
     let currentUser;
 
-    console.log(req.headers.authorization);
+    // console.log(req.headers.authorization);
 
     if (req.headers.authorization) {
       const token = getToken(req);
@@ -151,7 +151,7 @@ module.exports = class UserController {
     const token = getToken(req);
     const user = await getUserByToken(token);
 
-    console.log(req.body);
+    // console.log(req.body);
 
     const { name, email } = req.body;
 

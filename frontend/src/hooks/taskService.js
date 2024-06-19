@@ -14,18 +14,18 @@ export const createTask = async (task, token) => {
   }
 };
 
-export const getTasks = async (token) => {
-  try {
-    const response = await api.get("/tasks/mytasks", {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(token)}`,
-      },
-    });
-    return response.data.tasks;
-  } catch (err) {
-    throw err.response.data;
-  }
-};
+// export const getTasks = async (token) => {
+//   try {
+//     const response = await api.get("/tasks/mytasks", {
+//       headers: {
+//         Authorization: `Bearer ${JSON.parse(token)}`,
+//       },
+//     });
+//     return response.data.tasks;
+//   } catch (err) {
+//     throw err.response.data;
+//   }
+// };
 
 export const deleteTask = async (id, token) => {
   try {
