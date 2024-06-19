@@ -30,38 +30,35 @@ function TaskForm({ handleSubmit, taskData, btnText }) {
   }
 
   return (
-    // <form onSubmit={submit} className={formstyles.form_container}>
-    <div className={rowstyles.container}>
-      <div onSubmit={submit} className={rowstyles.row}>
-        <Input
-          text="Task Name"
-          type="text"
-          name="name"
-          handleOnChange={handleChange}
-          value={task.name || ""}
-        />
+    // <div className={rowstyles.container}>
+    <form onSubmit={submit} className={rowstyles.row}>
+      <Input
+        text="Task Name"
+        type="text"
+        name="name"
+        handleOnChange={handleChange}
+        value={task.name || ""}
+      />
 
-        <Select
-          name="effort"
-          text="Effort Level"
-          options={effort}
-          handleOnChange={handleEffort}
-          value={task.effort || ""}
-        />
+      <Select
+        name="effort"
+        text="Effort Level"
+        options={effort}
+        handleOnChange={handleEffort}
+        value={task.effort || ""}
+      />
 
-        <Select
-          name="period"
-          text="Period"
-          options={period}
-          handleOnChange={handlePeriod}
-          value={task.period || ""}
-        />
-        <div className={rowstyles.btn}>
-          <input type="submit" value={btnText} />
-        </div>
-      </div>
-    </div>
-    // {/* </form> */}
+      <Select
+        name="period"
+        text="Period"
+        options={period}
+        handleOnChange={handlePeriod}
+        value={task.period || ""}
+      />
+
+      <input type="submit" value={btnText} />
+    </form>
+    // </div>
   );
 }
 

@@ -51,7 +51,7 @@
 }
 
 .row input {
-    padding: .7em;
+    /* padding: .7em; */
     border: 1px solid #777;
     border-radius: 5px;
     margin-right: 2em;
@@ -68,6 +68,7 @@
     cursor: pointer;
     font-size: 0.9em;
     font-weight: bold;
+    
 }
 
 .row input[type='submit']:hover {

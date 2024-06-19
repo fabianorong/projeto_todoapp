@@ -1,3 +1,13 @@
+.tasklist_container_all{
+    width: 100%;
+    max-width: 640px;    
+    background-color: #fff;
+    margin: 100px auto 20px;
+    padding: 40px 30px 70px;
+    border-radius: 10px;
+    border-style: solid;
+    box-shadow: 3px 3px #363636;    
+}
 .tasklist_header {
     display: flex;
     justify-content: space-between;
@@ -7,7 +17,7 @@
 }
 
 .tasklist_header h1 {
-    margin: 0;
+    margin-bottom: 0.5em;
 }
 
 /* .tasklist_header a {    
@@ -39,10 +49,10 @@
 .tasklist_row {
     border-bottom: 1px solid #ff1e00;
     padding: 1em;
-    margin: 1em;
+    /* margin: 1em; */
     display: flex;
     align-items: center;
-    width: 100%;
+    /* width: 100%; */
 }
 
 .tasklist_row span {

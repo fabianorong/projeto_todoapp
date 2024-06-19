@@ -1,4 +1,5 @@
 import styles from "./Home.module.css";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -11,7 +12,13 @@ function Home() {
         manager app.
       </p>
 
-      <button class={styles.home_btn}>Make Todo List</button>
+      <button class={styles.home_btn}>
+        <Link to="/task/mytasks">Make Todo List</Link>
+      </button>
+
+      {/* <div className={styles.add_btn}>
+        <Link to="/tasks/create">Add Task</Link>
+      </div> */}
     </div>
   );
 }

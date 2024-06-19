@@ -28,5 +28,20 @@
 }
 
 .home_btn:hover {
+    color: #fff;
     background-color: #d62b00;
 }
+
+.home_btn a{
+    display: flex;
+    justify-content: center;    
+    margin: auto;
+    align-items: center;
+    flex-direction: column;   
+    text-align: center;    
+    text-decoration: none; 
+    color: #fff;    
+    cursor: pointer;
+    transition: .5s;    
+  }
+
